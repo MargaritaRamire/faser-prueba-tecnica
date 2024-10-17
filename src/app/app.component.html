@@ -1,26 +1,28 @@
 <div class="container">
     <h1>Prueba técnica - Estudio Faser</h1>
+  
     <h2>Listado de tareas</h2>
-
-    <!-- Formulario para agregar nuevas tareas -->
-    <div>
-        <input type="text" [(ngModel)]="nuevoTitulo" placeholder="Título de la tarea" />
-        <input type="number" [(ngModel)]="nuevaDuracion" placeholder="Duración (minutos)" />
-        <button (click)="agregarTarea()">Agregar Tarea</button>
+  
+    <!-- Checkbox para seleccionar/deseleccionar todas las tareas -->
+    <div class="controls mb-2">
+      <input type="checkbox" (change)="toggleSelectAll($event.target.checked)"> Seleccionar/Deseleccionar todas
     </div>
-
-    <table class="tareas-table" style="border-collapse: collapse; width: 100%;">
-        <thead>
-            <tr>
-                <th style="border: 1px solid black; padding: 8px;">Título</th>
-                <th style="border: 1px solid black; padding: 8px;">Duración (minutos)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let tarea of tareas">
-                <td style="border: 1px solid black; padding: 8px;">{{ tarea.titulo }}</td>
-                <td style="border: 1px solid black; padding: 8px;">{{ tarea.minutos }}</td>
-            </tr>
-        </tbody>
+  
+    <!-- Tabla de tareas -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th><input type="checkbox" (change)="toggleSelectAll($event.target.checked)"></th>
+          <th>Título</th>
+          <th>Duración (minutos)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tarea of tareas">
+          <td><input type="checkbox" [(ngModel)]="tarea.selected"></td>
+          <td>{{ tarea.titulo }}</td>
+          <td>{{ tarea.minutos }}</td>
+        </tr>
+      </tbody>
     </table>
 </div>

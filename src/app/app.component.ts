@@ -33,36 +33,8 @@ export class AppComponent {
     this.guardarTareasEnLocalStorage(); // Guardar tareas en localStorage
   }
 
-  agregarTarea() {
-    if (this.nuevoTitulo && this.nuevaDuracion) {
-      const nuevaTarea = new Tarea(
-        this.tareas.length + 1, // ID para la nueva tarea
-        this.nuevoTitulo,
-        this.nuevaDuracion,
-        false // Inicializamos la tarea como no seleccionada
-      );
-      this.tareas.push(nuevaTarea);
-      this.nuevoTitulo = '';
-      this.nuevaDuracion = null;
-
-      this.guardarTareasEnLocalStorage(); // Actualizar localStorage al agregar una nueva tarea
-    }
-  }
-
-  eliminarTareasSeleccionadas() {
-    this.tareas = this.tareas.filter(tarea => !tarea.selected);
-    this.guardarTareasEnLocalStorage(); // Actualizar localStorage al eliminar tareas
-  }
-
-  ordenarPorTitulo() {
-    this.tareas.sort((a, b) => {
-      if (this.ordenAscendente) {
-        return a.titulo.localeCompare(b.titulo);
-      } else {
-        return b.titulo.localeCompare(a.titulo);
-      }
-    });
-    this.ordenAscendente = !this.ordenAscendente;
+  toggleSelectAll(seleccionar: boolean) {
+    this.tareas.forEach(tarea => tarea.selected = seleccionar);
   }
 
   guardarTareasEnLocalStorage() {
