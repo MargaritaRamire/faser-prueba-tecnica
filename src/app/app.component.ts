@@ -8,10 +8,11 @@ import { Tarea } from './tarea';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  tareas: Tarea[] = []; // Array que contiene las tareas
+  tareas: Tarea[] = []; // Arreglo para almacenar las tareas
   nuevoTitulo: string = ''; // Título de la nueva tarea
   nuevaDuracion: number | null = null; // Duración de la nueva tarea
-  ordenAscendente: boolean = true; // Orden de las tareas
+  ordenAscendenteTitulo: boolean = true; // Control para ordenación por título
+  ordenAscendenteDuracion: boolean = true; // Control para ordenación por duración
 
   constructor(public service: AppService) {}
 
@@ -20,16 +21,16 @@ export class AppComponent {
   }
 
   cargarTareas() {
-    const tareasGuardadas = localStorage.getItem('tareas');
+    const tareasGuardadas = localStorage.getItem('tareas'); // Obtener tareas del localStorage
     if (tareasGuardadas) {
-      this.tareas = JSON.parse(tareasGuardadas); // Cargar tareas del localStorage si existen
+      this.tareas = JSON.parse(tareasGuardadas); // Parsear tareas guardadas
     } else {
-      this.obtenerTareas(); // Obtener tareas de la API si no hay guardadas
+      this.obtenerTareas(); // Si no hay tareas guardadas, obtener de la API
     }
   }
 
   async obtenerTareas() {
-    this.tareas = await this.service.obtenerTareas();
+    this.tareas = await this.service.obtenerTareas(); // Obtener tareas desde el servicio
     this.guardarTareasEnLocalStorage(); // Guardar tareas en localStorage
   }
 
@@ -37,26 +38,50 @@ export class AppComponent {
     if (this.nuevoTitulo && this.nuevaDuracion) {
       const nuevaTarea = new Tarea(
         this.tareas.length + 1, // ID para la nueva tarea
-        this.nuevoTitulo,
-        this.nuevaDuracion,
+        this.nuevoTitulo, // Título de la nueva tarea
+        this.nuevaDuracion, // Duración de la nueva tarea
         false // Inicializamos la tarea como no seleccionada
       );
-      this.tareas.push(nuevaTarea); // Agregar la nueva tarea al array
-      this.nuevoTitulo = ''; // Limpiar el input del título
-      this.nuevaDuracion = null; // Limpiar el input de duración
+      this.tareas.push(nuevaTarea); // Agregar nueva tarea al arreglo
+      this.nuevoTitulo = ''; // Limpiar el campo de título
+      this.nuevaDuracion = null; // Limpiar el campo de duración
 
-      this.guardarTareasEnLocalStorage(); // Actualizar localStorage
+      this.guardarTareasEnLocalStorage(); // Actualizar localStorage al agregar una nueva tarea
     }
   }
 
   eliminarTareasSeleccionadas() {
-    // Filtrar las tareas seleccionadas y eliminar del array
+    // Filtrar las tareas seleccionadas y actualizarlas en el arreglo
     this.tareas = this.tareas.filter(tarea => !tarea.selected);
-    this.guardarTareasEnLocalStorage(); // Actualizar localStorage después de eliminar
+    this.guardarTareasEnLocalStorage(); // Actualizar localStorage al eliminar tareas
+  }
+
+  // Ordenar tareas por título
+  ordenarPorTitulo() {
+    this.tareas.sort((a, b) => {
+      if (this.ordenAscendenteTitulo) {
+        return a.titulo.localeCompare(b.titulo); // Orden ascendente
+      } else {
+        return b.titulo.localeCompare(a.titulo); // Orden descendente
+      }
+    });
+    this.ordenAscendenteTitulo = !this.ordenAscendenteTitulo; // Alternar estado de orden
+  }
+
+  // Ordenar tareas por duración
+  ordenarPorDuracion() {
+    this.tareas.sort((a, b) => {
+      if (this.ordenAscendenteDuracion) {
+        return a.minutos - b.minutos; // Orden ascendente
+      } else {
+        return b.minutos - a.minutos; // Orden descendente
+      }
+    });
+    this.ordenAscendenteDuracion = !this.ordenAscendenteDuracion; // Alternar estado de orden
   }
 
   toggleSelectAll(seleccionar: boolean) {
-    // Marcar o desmarcar todas las tareas
+    // Cambiar el estado de selección de todas las tareas
     this.tareas.forEach(tarea => tarea.selected = seleccionar);
   }
 

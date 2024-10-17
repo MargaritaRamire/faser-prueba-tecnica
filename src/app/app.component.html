@@ -1,41 +1,40 @@
 <div class="container">
-	<h1>Prueba técnica - Estudio Faser</h1>
-  
-	<h3>Agregar nueva tarea</h3>
-	<div class="form-group">
-	  <input [(ngModel)]="nuevoTitulo" placeholder="Título de la tarea" class="form-control">
-	  <input [(ngModel)]="nuevaDuracion" type="number" placeholder="Duración (minutos)" class="form-control">
-	  <button (click)="agregarTarea()" class="btn btn-primary mt-2">Agregar tarea</button>
-	</div>
-  
-	<h2>Listado de tareas</h2>
-  
-	<!-- Checkbox para seleccionar/deseleccionar todas las tareas -->
-	<div class="controls mb-2">
-	  <input type="checkbox" (change)="toggleSelectAll($event.target.checked)"> Seleccionar/Deseleccionar todas
-	</div>
-  
-	<!-- Botón para eliminar tareas seleccionadas -->
-	<div class="controls mb-2">
-	  <button (click)="eliminarTareasSeleccionadas()" class="btn btn-danger">Eliminar tareas seleccionadas</button>
-	</div>
-  
-	<!-- Tabla de tareas -->
-	<table class="table table-bordered">
-	  <thead>
-		<tr>
-		  <th><input type="checkbox" (change)="toggleSelectAll($event.target.checked)"></th>
-		  <th (click)="ordenarPorTitulo()">Título</th>
-		  <th>Duración (minutos)</th>
-		</tr>
-	  </thead>
-	  <tbody>
-		<tr *ngFor="let tarea of tareas">
-		  <td><input type="checkbox" [(ngModel)]="tarea.selected"></td>
-		  <td>{{ tarea.titulo }}</td>
-		  <td>{{ tarea.minutos }}</td>
-		</tr>
-	  </tbody>
-	</table>
-  </div>
-  
+    <h1>Prueba técnica - Estudio Faser</h1>
+
+    <h3>Agregar nueva tarea</h3>
+    <div class="form-group">
+      <input [(ngModel)]="nuevoTitulo" placeholder="Título de la tarea" class="form-control">
+      <input [(ngModel)]="nuevaDuracion" type="number" placeholder="Duración (minutos)" class="form-control">
+      <button (click)="agregarTarea()" class="btn btn-primary mt-2">Agregar tarea</button>
+    </div>
+
+    <h2>Listado de tareas</h2>
+
+    <!-- Checkbox para seleccionar/deseleccionar todas las tareas -->
+    <div class="controls mb-2">
+      <input type="checkbox" (change)="toggleSelectAll($event.target.checked)"> Seleccionar/Deseleccionar todas
+    </div>
+
+    <!-- Botón para eliminar tareas seleccionadas -->
+    <div class="controls mb-2">
+      <button (click)="eliminarTareasSeleccionadas()" class="btn btn-danger">Eliminar tareas seleccionadas</button>
+    </div>
+
+    <!-- Tabla de tareas -->
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th><input type="checkbox" (change)="toggleSelectAll($event.target.checked)"></th> <!-- Checkbox para seleccionar tareas -->
+          <th (click)="ordenarPorTitulo()">Título</th> <!-- Encabezado para ordenar por título -->
+          <th (click)="ordenarPorDuracion()">Duración (minutos)</th> <!-- Encabezado para ordenar por duración -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tarea of tareas">
+          <td><input type="checkbox" [(ngModel)]="tarea.selected"></td> <!-- Checkbox para seleccionar tarea individual -->
+          <td>{{ tarea.titulo }}</td> <!-- Mostrar título de la tarea -->
+          <td>{{ tarea.minutos }}</td> <!-- Mostrar duración de la tarea -->
+        </tr>
+      </tbody>
+    </table>
+</div>
