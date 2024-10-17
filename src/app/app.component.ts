@@ -85,6 +85,16 @@ export class AppComponent {
     this.tareas.forEach(tarea => tarea.selected = seleccionar);
   }
 
+  destacarTareasSeleccionadas() {
+    // Cambiar el estado de destacada de las tareas seleccionadas
+    this.tareas.forEach(tarea => {
+      if (tarea.selected) {
+        tarea.destacada = !tarea.destacada; // Alternar el estado de destacada
+      }
+    });
+    this.guardarTareasEnLocalStorage(); // Actualizar localStorage al cambiar estado de tareas
+  }
+
   guardarTareasEnLocalStorage() {
     localStorage.setItem('tareas', JSON.stringify(this.tareas)); // Guardar tareas en localStorage
   }
