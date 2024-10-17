@@ -1,17 +1,34 @@
 <div class="container">
-	<h1>Gestión de Tareas</h1>
-	<input [(ngModel)]="nuevoTitulo" placeholder="Título de la tarea" />
-	<input [(ngModel)]="nuevaDuracion" type="number" placeholder="Duración (minutos)" />
-	<button (click)="agregarTarea()">Agregar Tarea</button>
-	<button (click)="eliminarTareasSeleccionadas()">Eliminar Tareas Seleccionadas</button>
-	<button (click)="destacarTareasSeleccionadas()">Destacar</button>
-	
+	<h1>Prueba técnica - Estudio Faser</h1>
+  
+	<h3>Agregar nueva tarea</h3>
+	<div class="form-group">
+	  <input [(ngModel)]="nuevoTitulo" placeholder="Título de la tarea" class="form-control">
+	  <input [(ngModel)]="nuevaDuracion" type="number" placeholder="Duración (minutos)" class="form-control">
+	  <button (click)="agregarTarea()" class="btn btn-primary mt-2">Agregar tarea</button>
+	</div>
+  
+	<h2>Listado de tareas</h2>
+  
+	<!-- Checkbox para seleccionar/deseleccionar todas las tareas -->
+	<div class="controls mb-2">
+	  <input type="checkbox" (change)="toggleSelectAll($event.target.checked)"> Seleccionar/Deseleccionar todas
+	</div>
+  
+	<!-- Botones para eliminar tareas seleccionadas, destacar y ordenar aleatoriamente -->
+	<div class="controls mb-2">
+	  <button (click)="eliminarTareasSeleccionadas()" class="btn btn-danger">Eliminar tareas seleccionadas</button>
+	  <button (click)="destacarTareas()" class="btn btn-warning">Destacar</button> <!-- Botón de destacar -->
+	  <button (click)="ordenarAleatoriamente()" class="btn btn-secondary">Ordenar aleatoriamente</button> <!-- Botón agregado -->
+	</div>
+  
+	<!-- Tabla de tareas -->
 	<table class="table table-bordered">
 	  <thead>
 		<tr>
 		  <th><input type="checkbox" (change)="toggleSelectAll($event.target.checked)"></th>
-		  <th (click)="ordenarPorTitulo()">Título</th> <!-- Ordenar por título -->
-		  <th (click)="ordenarPorDuracion()">Duración (minutos)</th> <!-- Ordenar por duración -->
+		  <th (click)="ordenarPorTitulo()">Título</th>
+		  <th (click)="ordenarPorDuracion()">Duración (minutos)</th> <!-- Agregado evento para ordenar -->
 		</tr>
 	  </thead>
 	  <tbody>

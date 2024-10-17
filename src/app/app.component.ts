@@ -8,29 +8,29 @@ import { Tarea } from './tarea';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  tareas: Tarea[] = []; // Arreglo para almacenar las tareas
-  nuevoTitulo: string = ''; // Título de la nueva tarea
-  nuevaDuracion: number | null = null; // Duración de la nueva tarea
-  ordenAscendenteTitulo: boolean = true; // Control para ordenación por título
-  ordenAscendenteDuracion: boolean = true; // Control para ordenación por duración
+  tareas: Tarea[] = [];
+  nuevoTitulo: string = '';
+  nuevaDuracion: number | null = null;
+  ordenAscendente: boolean = true;
+  ordenAscendenteDuracion: boolean = true; // Nueva variable para el orden de duración
 
   constructor(public service: AppService) {}
 
   ngOnInit() {
-    this.cargarTareas(); // Cargar tareas al iniciar el componente
+    this.cargarTareas();
   }
 
   cargarTareas() {
-    const tareasGuardadas = localStorage.getItem('tareas'); // Obtener tareas del localStorage
+    const tareasGuardadas = localStorage.getItem('tareas');
     if (tareasGuardadas) {
-      this.tareas = JSON.parse(tareasGuardadas); // Parsear tareas guardadas
+      this.tareas = JSON.parse(tareasGuardadas);
     } else {
       this.obtenerTareas(); // Si no hay tareas guardadas, obtener de la API
     }
   }
 
   async obtenerTareas() {
-    this.tareas = await this.service.obtenerTareas(); // Obtener tareas desde el servicio
+    this.tareas = await this.service.obtenerTareas();
     this.guardarTareasEnLocalStorage(); // Guardar tareas en localStorage
   }
 
@@ -38,37 +38,34 @@ export class AppComponent {
     if (this.nuevoTitulo && this.nuevaDuracion) {
       const nuevaTarea = new Tarea(
         this.tareas.length + 1, // ID para la nueva tarea
-        this.nuevoTitulo, // Título de la nueva tarea
-        this.nuevaDuracion, // Duración de la nueva tarea
+        this.nuevoTitulo,
+        this.nuevaDuracion,
         false // Inicializamos la tarea como no seleccionada
       );
-      this.tareas.push(nuevaTarea); // Agregar nueva tarea al arreglo
-      this.nuevoTitulo = ''; // Limpiar el campo de título
-      this.nuevaDuracion = null; // Limpiar el campo de duración
+      this.tareas.push(nuevaTarea);
+      this.nuevoTitulo = '';
+      this.nuevaDuracion = null;
 
       this.guardarTareasEnLocalStorage(); // Actualizar localStorage al agregar una nueva tarea
     }
   }
 
   eliminarTareasSeleccionadas() {
-    // Filtrar las tareas seleccionadas y actualizarlas en el arreglo
     this.tareas = this.tareas.filter(tarea => !tarea.selected);
     this.guardarTareasEnLocalStorage(); // Actualizar localStorage al eliminar tareas
   }
 
-  // Ordenar tareas por título
   ordenarPorTitulo() {
     this.tareas.sort((a, b) => {
-      if (this.ordenAscendenteTitulo) {
-        return a.titulo.localeCompare(b.titulo); // Orden ascendente
+      if (this.ordenAscendente) {
+        return a.titulo.localeCompare(b.titulo);
       } else {
-        return b.titulo.localeCompare(a.titulo); // Orden descendente
+        return b.titulo.localeCompare(a.titulo);
       }
     });
-    this.ordenAscendenteTitulo = !this.ordenAscendenteTitulo; // Alternar estado de orden
+    this.ordenAscendente = !this.ordenAscendente;
   }
 
-  // Ordenar tareas por duración
   ordenarPorDuracion() {
     this.tareas.sort((a, b) => {
       if (this.ordenAscendenteDuracion) {
@@ -77,25 +74,30 @@ export class AppComponent {
         return b.minutos - a.minutos; // Orden descendente
       }
     });
-    this.ordenAscendenteDuracion = !this.ordenAscendenteDuracion; // Alternar estado de orden
+    this.ordenAscendenteDuracion = !this.ordenAscendenteDuracion; // Alternar la dirección del orden
+  }
+
+  destacarTareas() {
+    const hayDestacadas = this.tareas.some(tarea => tarea.destacada);
+
+    this.tareas.forEach(tarea => {
+      if (tarea.selected) {
+        tarea.destacada = !hayDestacadas; // Alterna el estado de destacada
+      }
+    });
+
+    this.guardarTareasEnLocalStorage(); // Actualizar localStorage al cambiar el estado de las tareas
+  }
+
+  ordenarAleatoriamente() {
+    this.tareas.sort(() => Math.random() - 0.5);
   }
 
   toggleSelectAll(seleccionar: boolean) {
-    // Cambiar el estado de selección de todas las tareas
     this.tareas.forEach(tarea => tarea.selected = seleccionar);
   }
 
-  destacarTareasSeleccionadas() {
-    // Cambiar el estado de destacada de las tareas seleccionadas
-    this.tareas.forEach(tarea => {
-      if (tarea.selected) {
-        tarea.destacada = !tarea.destacada; // Alternar el estado de destacada
-      }
-    });
-    this.guardarTareasEnLocalStorage(); // Actualizar localStorage al cambiar estado de tareas
-  }
-
   guardarTareasEnLocalStorage() {
-    localStorage.setItem('tareas', JSON.stringify(this.tareas)); // Guardar tareas en localStorage
+    localStorage.setItem('tareas', JSON.stringify(this.tareas));
   }
 }
