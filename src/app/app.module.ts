@@ -11,7 +11,7 @@ import { AppService } from './app.service';
 	],
 	imports: [
 		BrowserModule,
-		FormsModule, // Agrega FormsModule aquí
+		FormsModule, 
 		AppRoutingModule
 	],
 	providers: [AppService],
